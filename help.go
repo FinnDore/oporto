@@ -23,7 +23,7 @@ type keyMap struct {
 // ShortHelp returns keybindings to be shown in the mini help view. It's part
 // of the key.Map interface.
 func (k keyMap) ShortHelp() []key.Binding {
-	return []key.Binding{k.Help, k.Quit}
+	return []key.Binding{k.Left, k.Right, k.Space, k.Help, k.Quit}
 }
 
 // FullHelp returns keybindings for the expanded help view. It's part of the
@@ -74,7 +74,7 @@ type helpModel struct {
 	quitting   bool
 }
 
-func helpSection() helpModel {
+func NewHelpSection() helpModel {
 	return helpModel{
 		keys:       keys,
 		help:       help.New(),
@@ -87,6 +87,7 @@ func (m helpModel) Init() tea.Cmd {
 }
 
 func (m helpModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	println("yess")
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		// If we set a width on the help menu it can gracefully truncate
@@ -109,6 +110,7 @@ func (m helpModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.quitting = true
 			return m, tea.Quit
 		}
+
 	}
 
 	return m, nil
