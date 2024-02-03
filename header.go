@@ -20,7 +20,7 @@ func NewheaderModel() headerModel {
 func (s headerModel) Init() tea.Cmd { return nil }
 
 func (s headerModel) View() string {
-	return headerStyle.Render("OPORTO") + headerAltStyle.Render(" - v0.0.1-rc")
+	return headerStyle.Render("OPORTO") + headerAltStyle.Render(" - v0.0.1-"+Commit)
 }
 
 func (s headerModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {

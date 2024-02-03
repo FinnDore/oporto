@@ -8,9 +8,11 @@ import (
 
 // MODEL DATA
 type simplePage struct {
-	flexBox *stickers.FlexBox
-	header  headerModel
-	footer  footerModel
+	flexBox     *stickers.FlexBox
+	header      headerModel
+	footer      footerModel
+	config      Config
+	renderCount int
 }
 
 var pageStyle = lipgloss.NewStyle().Margin(1)
@@ -19,15 +21,19 @@ var mainStyle = lipgloss.NewStyle().
 	Border(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("#FFFFFF0F"))
 
 var headerStyle = lipgloss.NewStyle().
-	Height(1).Bold(true).Foreground(lipgloss.Color("#5900ff"))
+	Bold(true).Foreground(lipgloss.Color("#5900ff"))
 
-var footerStyle = lipgloss.NewStyle().Height(10)
+var footerStyle = lipgloss.NewStyle()
 
 func NewSimplePage() simplePage {
+	config, _ := LoadConfig()
+
 	s := simplePage{
-		flexBox: stickers.NewFlexBox(0, 0).SetStyle(pageStyle),
-		header:  NewheaderModel(),
-		footer:  NewFooter(),
+		flexBox:     stickers.NewFlexBox(0, 0).SetStyle(pageStyle),
+		header:      NewheaderModel(),
+		footer:      NewFooter(),
+		config:      config,
+		renderCount: 0,
 	}
 
 	header := s.flexBox.NewRow().AddCells(
@@ -38,14 +44,14 @@ func NewSimplePage() simplePage {
 
 	mainContent := s.flexBox.NewRow().AddCells(
 		[]*stickers.FlexBoxCell{
-			stickers.NewFlexBoxCell(16, 9).SetStyle(mainStyle),
-			stickers.NewFlexBoxCell(16, 9).SetStyle(mainStyle),
+			stickers.NewFlexBoxCell(1, 100).SetStyle(mainStyle),
+			stickers.NewFlexBoxCell(1, 100).SetStyle(mainStyle),
 		},
 	)
 
 	footer := s.flexBox.NewRow().AddCells(
 		[]*stickers.FlexBoxCell{
-			stickers.NewFlexBoxCell(0, 1).SetContent(s.footer.View()).SetStyle(footerStyle),
+			stickers.NewFlexBoxCell(0, 5).SetContent(s.footer.View()).SetStyle(footerStyle),
 		},
 	)
 
@@ -59,6 +65,8 @@ func (s simplePage) Init() tea.Cmd { return nil }
 
 // VIEW
 func (s simplePage) View() string {
+	s.renderCount++
+
 	return s.flexBox.Render()
 }
 
