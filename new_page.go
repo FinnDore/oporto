@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/76creates/stickers"
 	tea "github.com/charmbracelet/bubbletea"
 	lipgloss "github.com/charmbracelet/lipgloss"
@@ -42,9 +44,11 @@ func NewSimplePage() simplePage {
 		},
 	)
 
+	var enviroment = os.Args[1]
+	var env = s.config.Enviroments[enviroment]
 	mainContent := s.flexBox.NewRow().AddCells(
 		[]*stickers.FlexBoxCell{
-			stickers.NewFlexBoxCell(1, 100).SetStyle(mainStyle),
+			stickers.NewFlexBoxCell(1, 100).SetContent(env.SshCommand).SetStyle(mainStyle),
 			stickers.NewFlexBoxCell(1, 100).SetStyle(mainStyle),
 		},
 	)
