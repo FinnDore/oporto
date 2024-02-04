@@ -1,0 +1,2 @@
+[enviroments]
+dev = { sshCommand = "ssh -p 2222 -i ssh/oporto finn@127.0.0.1", staticHosts = ["your-static-host"] }

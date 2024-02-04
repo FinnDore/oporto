@@ -1,0 +1,29 @@
+services:
+
+  serviceB:
+    image: mockserver/mockserver:5.14.0
+    command: -logLevel DEBUG -serverPort 80 -proxyRemoteHost 127.0.0.1
+    # ports:
+    #   - 1080:1090
+
+  openssh-server:
+    image: lscr.io/linuxserver/openssh-server:latest
+    container_name: openssh-server
+    # hostname: openssh-server #optional
+    environment:
+      - DOCKER_MODS=linuxserver/mods:openssh-server-ssh-tunnel
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - PUBLIC_KEY_FILE=/ssh-keys/oporto.pub
+      - SUDO_ACCESS=true #optional
+      # - PASSWORD_ACCESS=true #optional
+      # - USER_PASSWORD=password #optional
+      - USER_NAME=finn #optional
+      - LOG_STDOUT= #optional
+      - ALLOW_TCP_FORWARDING=yes
+    volumes:
+        - ./config:/ssh-keys:rw
+    ports:
+      - 2222:2222
+    restart: unless-stopped
