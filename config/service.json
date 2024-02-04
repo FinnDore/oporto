@@ -1,0 +1,57 @@
+{
+  "instance": {
+    "instanceId": "$id",
+    "app": "serviceB",
+    "ipAddr": "serviceB",
+    "hostName": "serviceB",
+    "status": "UP",
+    "overriddenStatus": "UNKNOWN",
+    "port": {
+      "$": 8080,
+      "@enabled": "true"
+    },
+    "securePort": {
+      "$": 8443,
+      "@enabled": "true"
+    },
+    "countryId": 1,
+    "dataCenterInfo": {
+      "@class": "com.netflix.appinfo.AmazonInfo",
+      "name": "Amazon",
+      "metadata": {
+        "vpc-id": "$vpc",
+        "ami-id": "$ami",
+        "mac": "$mac",
+        "accountId": "$acc",
+        "instance-id": "$id",
+        "instance-type": "$instance_type",
+        "local-hostname": "$hostname",
+        "local-ipv4": "$addr",
+        "availability-zone": "$zone"
+      }
+    },
+    "leaseInfo": {
+      "renewalIntervalInSecs": 30,
+      "durationInSecs": 90,
+      "registrationTimestamp": 0,
+      "lastRenewalTimestamp": 0,
+      "evictionTimestamp": 0,
+      "serviceUpTimestamp": 0
+    },
+    "metadata": {
+      "ec2InstanceId": "$id",
+      "imageId": "$img"
+    },
+    "appGroupName": "UNKNOWN",
+    "homePageUrl": "$homepage",
+    "statusPageUrl": "$statuspage",
+    "healthCheckUrl": "$hc",
+    "secureHealthCheckUrl": "$shc",
+    "secureVipAddress": "$svip",
+    "vipAddress": "$vip",
+    "isCoordinatingDiscoveryServer": "false",
+    "lastUpdatedTimestamp": "$LAST_REGISTRATION",
+    "lastDirtyTimestamp": "$LAST_REGISTRATION",
+    "asgName": "$asg"
+  }
+}
