@@ -1,8 +1,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/76creates/stickers"
 	tea "github.com/charmbracelet/bubbletea"
 	lipgloss "github.com/charmbracelet/lipgloss"
@@ -27,6 +25,8 @@ var headerStyle = lipgloss.NewStyle().
 
 var footerStyle = lipgloss.NewStyle()
 
+var blockText = lipgloss.NewStyle()
+
 func NewSimplePage() simplePage {
 	config, _ := LoadConfig()
 
@@ -44,11 +44,20 @@ func NewSimplePage() simplePage {
 		},
 	)
 
-	var enviroment = os.Args[1]
-	var env = s.config.Enviroments[enviroment]
+	services, err := GetServices()
+
+	if err != nil {
+		panic(nil)
+	}
+	var thing = ""
+	for _, service := range services.Application {
+		thing += blockText.Render(service.Name) + "\n"
+	}
+
 	mainContent := s.flexBox.NewRow().AddCells(
 		[]*stickers.FlexBoxCell{
-			stickers.NewFlexBoxCell(1, 100).SetContent(env.SshCommand).SetStyle(mainStyle),
+			stickers.NewFlexBoxCell(1, 100).
+				SetContent(thing).SetStyle(mainStyle),
 			stickers.NewFlexBoxCell(1, 100).SetStyle(mainStyle),
 		},
 	)
@@ -58,10 +67,10 @@ func NewSimplePage() simplePage {
 			stickers.NewFlexBoxCell(0, 5).SetContent(s.footer.View()).SetStyle(footerStyle),
 		},
 	)
-
 	s.flexBox.AddRows([]*stickers.FlexBoxRow{header})
 	s.flexBox.AddRows([]*stickers.FlexBoxRow{mainContent})
 	s.flexBox.AddRows([]*stickers.FlexBoxRow{footer})
+
 	return s
 }
 
