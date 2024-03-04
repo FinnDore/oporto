@@ -10,6 +10,7 @@ type simplePage struct {
 	header             headerModel
 	footer             footerModel
 	unselectedServices UnselectedServicesModel
+	selectedServices   SelectedServicesModel
 	config             Config
 	applications       Applications
 }
@@ -34,6 +35,7 @@ func NewSimplePage() simplePage {
 	s := simplePage{
 		header:             NewheaderModel(),
 		unselectedServices: NewUnselectedServices(),
+		selectedServices:   NewSelectedServices(),
 		footer:             NewFooter(),
 		config:             config,
 	}
@@ -43,6 +45,7 @@ func NewSimplePage() simplePage {
 	})
 
 	s.unselectedServices.SetServices(services)
+	s.selectedServices.SetServices(services)
 	return s
 }
 
@@ -50,7 +53,7 @@ func (s simplePage) Init() tea.Cmd { return nil }
 
 // VIEW
 func (s simplePage) View() string {
-	return s.header.View() + "\n" + s.unselectedServices.View() + "\n" + s.footer.View()
+	return s.header.View() + "\n" + s.unselectedServices.View() + s.selectedServices.View() + "\n" + s.footer.View()
 }
 
 // UPDATE
@@ -65,7 +68,12 @@ func (s simplePage) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	return s, nil
+	var cmds []tea.Cmd
+	_, cmd1 := s.unselectedServices.Update(msg)
+
+	_, cmd2 := s.selectedServices.Update(msg)
+	cmds = append(cmds, cmd1, cmd2)
+	return s, tea.Batch(cmds...)
 }
 
 func Map[T, V any](ts []T, fn func(T) V) []V {

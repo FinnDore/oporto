@@ -6,19 +6,19 @@ import (
 	lipgloss "github.com/charmbracelet/lipgloss"
 )
 
-var unfocusedTableStyle = table.Styles{
+var unfocusedTableStyle1 = table.Styles{
 	Selected: lipgloss.NewStyle(),
 	Header:   table.DefaultStyles().Header,
 	Cell:     table.DefaultStyles().Cell,
 }
 
-type UnselectedServicesModel struct {
+type SelectedServicesModel struct {
 	unselectedServices []string
 	table              table.Model
 }
 
-func NewUnselectedServices() UnselectedServicesModel {
-	unselectedServices := UnselectedServicesModel{
+func NewSelectedServices() SelectedServicesModel {
+	unselectedServices := SelectedServicesModel{
 		table: table.New(
 			table.WithColumns([]table.Column{{Title: "Name", Width: 20}}),
 			table.WithRows([]table.Row{}),
@@ -27,37 +27,37 @@ func NewUnselectedServices() UnselectedServicesModel {
 		),
 	}
 
+	unselectedServices.table.SetStyles(unfocusedTableStyle)
 	return unselectedServices
 
 }
 
-func (s UnselectedServicesModel) Init() tea.Cmd { return nil }
+func (s SelectedServicesModel) Init() tea.Cmd { return nil }
 
-func (s UnselectedServicesModel) View() string {
+func (s SelectedServicesModel) View() string {
 	if s.unselectedServices == nil {
 		return ""
 	}
 	return s.table.View()
 }
-func (s *UnselectedServicesModel) SetServices(services []string) {
+func (s *SelectedServicesModel) SetServices(services []string) {
 	rows := Map(services, func(service string) table.Row {
 		return table.Row{service}
 	})
-	s.table.Focus()
 	s.table.SetRows(rows)
 	s.unselectedServices = services
 }
 
-func (f *UnselectedServicesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (f *SelectedServicesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg.(type) {
 	case tea.KeyMsg:
 		switch msg.(tea.KeyMsg).String() {
 		case "h", "left":
-			f.table.Focus()
-			f.table.SetStyles(table.DefaultStyles())
-		case "l", "right":
-			f.table.SetStyles(unfocusedTableStyle)
 			f.table.Blur()
+			f.table.SetStyles(unfocusedTableStyle1)
+		case "l", "right":
+			f.table.SetStyles(table.DefaultStyles())
+			f.table.Focus()
 		case "up", "k":
 			if f.table.Focused() {
 				f.table.MoveUp(0)
